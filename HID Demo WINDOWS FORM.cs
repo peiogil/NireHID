@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using HidUtilityNuget;
+using USB_HID_con_la_PICDEM_FSUSB_18F4550;
 
 namespace HidDemoWindowsForms
 {
@@ -420,8 +421,8 @@ namespace HidDemoWindowsForms
                 // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
                 OutBuffer.buffer[0] = 0x00;
                 // 0x82 is the "Get Pushbutton State para encender Led D4" command in the firmware
-                OutBuffer.buffer[1] = 0x85;  // OutBuffer.buffer[1] = 0x81;        
-                LastCommand = 0x85;          //LastCommand = 0x81;        
+                OutBuffer.buffer[1] = 0x85;  // OutBuffer.buffer[1] = 0x85;        
+                LastCommand = 0x85;          //LastCommand = 0x85;        
             }
             // Request that this buffer be sent
             OutBuffer.RequestTransfer = true;
@@ -575,6 +576,17 @@ namespace HidDemoWindowsForms
                     // Nothing to do
                     break;
             }
+        }
+
+        private void Exit_Clik(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void MovContCLK_Click(object sender, EventArgs e)
+        {
+            MovContCLK movContCLK = new MovContCLK();
+            movContCLK.Show();
         }
     } //public partial class Form1 : Form
 } //namespace HidDemoWindowsForms

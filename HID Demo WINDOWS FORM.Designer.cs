@@ -64,6 +64,8 @@ namespace HidDemoWindowsForms
             this.IniciaTempor0Button = new System.Windows.Forms.Button();
             this.Temp_0_activoText = new System.Windows.Forms.Label();
             this.TempContLabel = new System.Windows.Forms.Label();
+            this.Exitbutton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ToggleLedD2Button
@@ -386,11 +388,33 @@ namespace HidDemoWindowsForms
             this.TempContLabel.TabIndex = 48;
             this.TempContLabel.Text = "Contador";
             // 
+            // Exitbutton
+            // 
+            this.Exitbutton.Location = new System.Drawing.Point(421, 43);
+            this.Exitbutton.Name = "Exitbutton";
+            this.Exitbutton.Size = new System.Drawing.Size(75, 23);
+            this.Exitbutton.TabIndex = 49;
+            this.Exitbutton.Text = "Exit";
+            this.Exitbutton.UseVisualStyleBackColor = true;
+            this.Exitbutton.Click += new System.EventHandler(this.Exit_Clik);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(275, 26);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(92, 39);
+            this.button1.TabIndex = 50;
+            this.button1.Text = "Movimiento\r\nContinuo CLK";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.MovContCLK_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(511, 768);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Exitbutton);
             this.Controls.Add(this.TempContLabel);
             this.Controls.Add(this.Temp_0_activoText);
             this.Controls.Add(this.IniciaTempor0Button);
@@ -462,6 +486,8 @@ namespace HidDemoWindowsForms
         private System.Windows.Forms.Button IniciaTempor0Button;
         private System.Windows.Forms.Label Temp_0_activoText;
         private System.Windows.Forms.Label TempContLabel;
+        private System.Windows.Forms.Button Exitbutton;
+        private System.Windows.Forms.Button button1;
     }
 }
 
