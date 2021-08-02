@@ -362,11 +362,11 @@ namespace HidDemoWindowsForms
             // 
             // IniciaTempor0Button
             // 
-            this.IniciaTempor0Button.Location = new System.Drawing.Point(288, 330);
+            this.IniciaTempor0Button.Location = new System.Drawing.Point(265, 323);
             this.IniciaTempor0Button.Name = "IniciaTempor0Button";
             this.IniciaTempor0Button.Size = new System.Drawing.Size(116, 27);
             this.IniciaTempor0Button.TabIndex = 46;
-            this.IniciaTempor0Button.Text = "TEMPORIZADOR_0";
+            this.IniciaTempor0Button.Text = "CLK";
             this.IniciaTempor0Button.UseVisualStyleBackColor = true;
             this.IniciaTempor0Button.Click += new System.EventHandler(this.IniciaTempor0Button_Click);
             // 

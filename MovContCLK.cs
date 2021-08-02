@@ -15,7 +15,13 @@ namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
     {
         bool ToggleLedD2Pending = false;
         byte LastCommand = 0x80;
-
+        bool MarchaPending = false;
+        bool ParoPending = true;
+        bool CcwPending = false;
+        bool CwPending = true;
+        byte SentidoGiro = 1;
+        byte[] contadorTemp0 = new byte[2];
+        ControlMovimientoContinuo controlMovimientoContinuo = new ControlMovimientoContinuo(false);
         HidUtility HidUtil;
         public MovContCLK()
         {
@@ -50,13 +56,49 @@ namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
                 ToggleLedD2Pending = false;
                 LastCommand = 0x80;
             }
+            else if(MarchaPending==true)
+            {// The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
+                OutBuffer.buffer[0] = 0;
+                // 0x86 is the "Marcha" command in the firmware
+                OutBuffer.buffer[1] = 0x86;
+                OutBuffer.buffer[2] = contadorTemp0[0];
+                OutBuffer.buffer[3] = contadorTemp0[1];
+                OutBuffer.buffer[4] = SentidoGiro;
+                MarchaPending = false;
+                LastCommand = 0x86;
+
+            }
             // Request that this buffer be sent
             OutBuffer.RequestTransfer = true;
         }
+        
 
         private void button1_Click(object sender, EventArgs e)
         {
             ToggleLedD2Pending = true;
+        }
+
+        private void radioButtonMarcha_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonMarcha.Checked == true) {
+                if (controlMovimientoContinuo.comprobarConvertirFrecuenciaCLK(textBoxFrecuenciaCLK.Text) == true)
+            {
+                MarchaPending = true;
+                    //obtiene los byte a cargar en TMR0H y el TMR0L para la fr del CLK del TC78H
+                    contadorTemp0 = BitConverter.GetBytes(controlMovimientoContinuo.CounterTimer0);
+                    if (this.radioButtonCW.Checked)
+                        SentidoGiro = 1;
+                    else
+                        SentidoGiro = 0;
+
+            }
+            else
+            {
+                MessageBox.Show("Dato de frecuencia erroneo");
+
+            }
+}
+            
         }
     }
         

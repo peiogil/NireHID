@@ -20,7 +20,7 @@ namespace HidDemoWindowsForms
         // Vendor and Product ID of the device we want to connect to
         ushort VID = 0x04D8;
         ushort PID = 0x003F;
-
+       
         // Global variables used by the form / application
         byte LastCommand = 0x81;
         bool WaitingForDevice = false;
@@ -162,7 +162,7 @@ namespace HidDemoWindowsForms
         //Update ADC bar
         private void UpdateAdcBar()
         {
-            // Ui operations are relatively costly so only update if the value has changed
+            // GUi operations are relatively costly so only update if the value has changed
             if (AnalogBar.Value != (int)AdcValue)
             {
                 AnalogBar.Value = (int)AdcValue;
@@ -304,6 +304,8 @@ namespace HidDemoWindowsForms
         private void IniciaTempor0Button_Click(object sender, EventArgs e)
         {
             Timer0Pending = true;
+            
+                
         }
 
         /*
@@ -354,7 +356,7 @@ namespace HidDemoWindowsForms
             }
             UpdateStatistics();
             UpdatePushbutton();
-            UpdateTemp0();
+           // UpdateTemp0();
             UpdateAdcBar();
         }
 
@@ -385,17 +387,21 @@ namespace HidDemoWindowsForms
             }
             else if (Timer0Pending == true)
             {
-                // The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
                 OutBuffer.buffer[0] = 0;
-                // 0x84 is the "Start counting time" command in the firmware
-                OutBuffer.buffer[1] = 0x84;
+                // 0x86 is the "Marcha" command in the firmware
+                OutBuffer.buffer[1] = 0x86;
+                OutBuffer.buffer[2] = 0xfA;
+                OutBuffer.buffer[3] = 0xf6;
+                OutBuffer.buffer[4] = 1;
                 Timer0Pending = false;
-                LastCommand = 0x84;
+                LastCommand = 0x86;
+                
             }
             else if (LastCommand == 0x85)
             {
                 // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
                 OutBuffer.buffer[0] = 0x00;
+                // 0x82 is the "Get Pushbutton S3 State para encender Led D4" command in the firmware
                 OutBuffer.buffer[1] = 0x82;
                 LastCommand = 0x82;
             }
@@ -404,6 +410,7 @@ namespace HidDemoWindowsForms
             {
                 // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
                 OutBuffer.buffer[0] = 0x00;
+                // 0x81 is the Get Pushbutton S2 State para mostrar "Pushbutton:pressed" in the screen
                 OutBuffer.buffer[1] = 0x81;
                 LastCommand = 0x81;
             }
@@ -420,7 +427,7 @@ namespace HidDemoWindowsForms
             {
                 // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
                 OutBuffer.buffer[0] = 0x00;
-                // 0x82 is the "Get Pushbutton State para encender Led D4" command in the firmware
+                
                 OutBuffer.buffer[1] = 0x85;  // OutBuffer.buffer[1] = 0x85;        
                 LastCommand = 0x85;          //LastCommand = 0x85;        
             }
@@ -432,7 +439,8 @@ namespace HidDemoWindowsForms
         // Schedule to request a packet if the transfer was successful
         public void PacketSentHandler(object sender, UsbBuffer OutBuffer)
         {
-            if(LastCommand == 0x80 || LastCommand==0x83 || LastCommand==0x84)
+            
+           if(LastCommand == 0x80 || LastCommand==0x83 || LastCommand==0x86)
             {
                 WaitingForDevice = false;
             }
@@ -566,7 +574,7 @@ namespace HidDemoWindowsForms
                 case HidUtility.UsbConnectionStatus.Connected:
                     UpdateStatistics();
                     UpdatePushbutton();
-                    UpdateTemp0();
+                    //UpdateTemp0(); PASA A CONTROLAR EL clk DE MARCHA
                     UpdateAdcBar();
                     break;
                 case HidUtility.UsbConnectionStatus.Disconnected:
