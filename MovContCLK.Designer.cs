@@ -1,4 +1,4 @@
-﻿namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
+﻿namespace  HidDemoWindowsForms
 {
     partial class MovContCLK
     {
@@ -37,6 +37,8 @@
             this.radioButtonCCW = new System.Windows.Forms.RadioButton();
             this.textBoxFrecuenciaCLK = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.StatusText = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBoxSentidoGiro.SuspendLayout();
             this.SuspendLayout();
@@ -62,6 +64,7 @@
             this.radioButtonParo.TabStop = true;
             this.radioButtonParo.Text = "Paro";
             this.radioButtonParo.UseVisualStyleBackColor = true;
+            this.radioButtonParo.CheckedChanged += new System.EventHandler(this.radioButtonParo_CheckedChanged);
             // 
             // radioButtonMarcha
             // 
@@ -134,11 +137,32 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Frecuencia CLK (Hz)";
             // 
+            // StatusText
+            // 
+            this.StatusText.AutoSize = true;
+            this.StatusText.Location = new System.Drawing.Point(405, 64);
+            this.StatusText.Name = "StatusText";
+            this.StatusText.Size = new System.Drawing.Size(216, 13);
+            this.StatusText.TabIndex = 7;
+            this.StatusText.Text = "18F4550 Connection Status: Not connected";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(405, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(115, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Comunicación USB";
+            // 
             // MovContCLK
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.StatusText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxFrecuenciaCLK);
             this.Controls.Add(this.groupBoxSentidoGiro);
@@ -166,5 +190,7 @@
         private System.Windows.Forms.RadioButton radioButtonCCW;
         private System.Windows.Forms.TextBox textBoxFrecuenciaCLK;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label StatusText;
+        private System.Windows.Forms.Label label2;
     }
 }

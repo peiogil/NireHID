@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HidUtilityNuget;
 
-namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
+namespace HidDemoWindowsForms
 {
     public partial class MovContCLK : Form
     {
@@ -35,7 +35,7 @@ namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
             // Register event handlers
             //HidUtil.RaiseDeviceRemovedEvent += DeviceRemovedHandler;
             //HidUtil.RaiseDeviceAddedEvent += DeviceAddedHandler;
-            //HidUtil.RaiseConnectionStatusChangedEvent += ConnectionStatusChangedHandler;
+            HidUtil.RaiseConnectionStatusChangedEvent += ConnectionStatusChangedHandler;
             HidUtil.RaiseSendPacketEvent += SendPacketHandler;
             //HidUtil.RaisePacketSentEvent += PacketSentHandler;
             //HidUtil.RaiseReceivePacketEvent += ReceivePacketHandler;
@@ -56,7 +56,7 @@ namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
                 ToggleLedD2Pending = false;
                 LastCommand = 0x80;
             }
-            else if(MarchaPending==true)
+            else if (MarchaPending == true)
             {// The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
                 OutBuffer.buffer[0] = 0;
                 // 0x86 is the "Marcha" command in the firmware
@@ -66,6 +66,15 @@ namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
                 OutBuffer.buffer[4] = SentidoGiro;
                 MarchaPending = false;
                 LastCommand = 0x86;
+
+            }
+            else if (ParoPending == true)
+            {// The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
+                OutBuffer.buffer[0] = 0;
+                // 0x85 is the "Paro" command in the firmware
+                OutBuffer.buffer[1] = 0x85;
+                ParoPending = false;
+                LastCommand = 0x85;
 
             }
             // Request that this buffer be sent
@@ -100,6 +109,66 @@ namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
 }
             
         }
+        /* A USB device has been added
+        // Update the event log and device list
+        void DeviceAddedHandler(object sender, Device dev)
+        {
+            //WriteLog("Device added: " + dev.ToString(), false);
+            RefreshDeviceList();
+        }
+
+        private void RefreshDeviceList()
+        {
+            string txt = "";
+            foreach (Device dev in HidUtil.DeviceList)
+            {
+                string devString = string.Format("VID=0x{0:X4} PID=0x{1:X4}: {2} ({3})", dev.Vid, dev.Pid, dev.Caption, dev.Manufacturer);
+                txt += devString + Environment.NewLine;
+            }
+        DevicesTextBox.Text = txt.TrimEnd('\n');
+        }
+        */
+        // Connection status of our selected device has changed
+        // Update the user interface
+        void ConnectionStatusChangedHandler(object sender, HidUtility.ConnectionStatusEventArgs e)
+        {
+            // Write log entry
+            //WriteLog("Connection status changed to: " + e.ToString(), false);
+            // Update user interface
+            switch (e.ConnectionStatus)
+            {
+                case HidUtility.UsbConnectionStatus.Connected:
+                    StatusText.Text = string.Format("18F4550 (Connection status = {0})", e.ConnectionStatus.ToString());
+                 //   SetUserInterfaceStatus(true);
+                   // ConnectedTimestamp = DateTime.Now;
+                    break;
+                case HidUtility.UsbConnectionStatus.Disconnected:
+                    StatusText.Text = string.Format("18F4550 (Connection status = {0})", e.ConnectionStatus.ToString());
+                   // AnalogBar.Value = 0;
+                   //SetUserInterfaceStatus(false);
+
+                    break;
+                case HidUtility.UsbConnectionStatus.NotWorking:
+                    StatusText.Text = string.Format("18F4550 attached but not working (Connection status = {0})", e.ConnectionStatus.ToString());
+                  //  AnalogBar.Value = 0;
+                  //  SetUserInterfaceStatus(false);
+                    break;
+            }
+            /*
+            UpdateStatistics();
+            UpdatePushbutton();
+            // UpdateTemp0();
+            UpdateAdcBar();
+            */
+        }
+
+        private void radioButtonParo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonParo.Checked == true)
+                ParoPending = true;
+            else
+                ParoPending = false;
+        }
     }
-        
+
 }
