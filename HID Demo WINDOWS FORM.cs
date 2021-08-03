@@ -162,7 +162,7 @@ namespace HidDemoWindowsForms
         //Update ADC bar
         private void UpdateAdcBar()
         {
-            // GUi operations are relatively costly so only update if the value has changed
+            // Ui operations are relatively costly so only update if the value has changed
             if (AnalogBar.Value != (int)AdcValue)
             {
                 AnalogBar.Value = (int)AdcValue;
