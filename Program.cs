@@ -14,7 +14,7 @@ namespace HidDemoWindowsForms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MovContCLK());
+            Application.Run(new Form1());
         }
     }
 }

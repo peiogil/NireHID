@@ -253,7 +253,7 @@ namespace HidDemoWindowsForms
             this.DevicesTextBox.Name = "DevicesTextBox";
             this.DevicesTextBox.ReadOnly = true;
             this.DevicesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.DevicesTextBox.Size = new System.Drawing.Size(557, 162);
+            this.DevicesTextBox.Size = new System.Drawing.Size(710, 162);
             this.DevicesTextBox.TabIndex = 35;
             // 
             // HorizontalBar1
