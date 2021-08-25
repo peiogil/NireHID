@@ -93,22 +93,24 @@ namespace HidDemoWindowsForms
         private void radioButtonMarcha_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonMarcha.Checked == true) {
-                if (controlMovimientoContinuo.comprobarConvertirFrecuenciaCLK(textBoxFrecuenciaCLK.Text) == true &
+                if (controlMovimientoContinuo.comprobarFrecuenciaCLK(textBoxFrecuenciaCLK.Text,out float float_frecuenciaCLK) == true &
                     StepResolutionString!=null)
             {
+                  
                 MarchaPending = true;
                     //obtiene los byte a cargar en TMR0H y el TMR0L para la fr del CLK del TC78H
-                    contadorTemp0 = BitConverter.GetBytes(controlMovimientoContinuo.CounterTimer0);
+                    contadorTemp0 = 
+                        BitConverter.GetBytes(controlMovimientoContinuo.convertirFrecuenciaCLK(StepResolution, float_frecuenciaCLK));
                     if (this.radioButtonCW.Checked)
                         SentidoGiro = 1;
                     else
                         SentidoGiro = 0;
             }
-            else if (controlMovimientoContinuo.comprobarConvertirFrecuenciaCLK(textBoxFrecuenciaCLK.Text) == false &
+            else if (controlMovimientoContinuo.comprobarFrecuenciaCLK(textBoxFrecuenciaCLK.Text, out float a) == false &
                         StepResolutionString == null)
                  MessageBox.Show("Dato de frecuencia erroneo y no seleccionada resolución del paso");
                
-                else if (controlMovimientoContinuo.comprobarConvertirFrecuenciaCLK(textBoxFrecuenciaCLK.Text) == true &
+                else if (controlMovimientoContinuo.comprobarFrecuenciaCLK(textBoxFrecuenciaCLK.Text, out float b) == true &
                         StepResolutionString == null)
                
                     MessageBox.Show("No seleccionada resolución del paso");
