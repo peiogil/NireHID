@@ -54,9 +54,9 @@ namespace HidDemoWindowsForms
                 // The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
                 OutBuffer.buffer[0] = 0;
                 // 0x80 is the "Toggle LED 2" command in the firmware
-                OutBuffer.buffer[1] = 0x80;
+                OutBuffer.buffer[1] = 0x83;//cambio a 0x83 para probar con el led4. Led2 0x80
                 ToggleLedD2Pending = false;
-                LastCommand = 0x80;
+                LastCommand = 0x83;
             }
             else if (MarchaPending == true)
             {// The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
