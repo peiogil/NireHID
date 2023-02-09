@@ -12,8 +12,14 @@ using HidUtilityNuget;
 namespace HidDemoWindowsForms
 {
     public partial class MovContCLK : Form
+
     {
-        bool ToggleLedD2Pending = false;
+        // Global variables used by the form / application
+
+        uint AdcValue = 0;
+        bool WaitingForDevice = false;
+        bool Timer0Pending = false;
+        bool ToggleLedD4Pending = false;
         byte LastCommand = 0x80;
         bool MarchaPending = false;
         bool ParoPending = true;
@@ -25,7 +31,7 @@ namespace HidDemoWindowsForms
         byte[] contadorTemp0 = new byte[2];
         ControlMovimientoContinuo controlMovimientoContinuo = new ControlMovimientoContinuo(false);
         HidUtility HidUtil;
-        public MovContCLK()
+        public unsafe MovContCLK()
         {
             InitializeComponent();
             // Get an instance of HidUtility
@@ -38,24 +44,25 @@ namespace HidDemoWindowsForms
             //HidUtil.RaiseDeviceRemovedEvent += DeviceRemovedHandler;
             //HidUtil.RaiseDeviceAddedEvent += DeviceAddedHandler;
             HidUtil.RaiseConnectionStatusChangedEvent += ConnectionStatusChangedHandler;
-            HidUtil.RaiseSendPacketEvent += SendPacketHandler;
-            //HidUtil.RaisePacketSentEvent += PacketSentHandler;
-            //HidUtil.RaiseReceivePacketEvent += ReceivePacketHandler;
-            //HidUtil.RaisePacketReceivedEvent += PacketReceivedHandler;
+            HidUtil.RaiseSendPacketEvent += SendPacketHandlerMovCont;
+            HidUtil.RaisePacketSentEvent += PacketSentHandler;
+            HidUtil.RaiseReceivePacketEvent += ReceivePacketHandler;
+            HidUtil.RaisePacketReceivedEvent += PacketReceivedHandler;
             // Initial attempt to connect
             HidUtil.SelectDevice(new HidUtilityNuget.Device(0x04D8, 0X003F));
-        }
-        public void SendPacketHandler(object sender, UsbBuffer OutBuffer)
+        }// MovContCLK()
+
+        public void SendPacketHandlerMovCont(object sender, UsbBuffer OutBuffer)
         {
             // Fill entire buffer with 0xFF
             OutBuffer.clear();
-            if (ToggleLedD2Pending == true)
+            if (ToggleLedD4Pending == true)
             {
                 // The first byte is the "Report ID" and does not get sent over the USB bus. Always set = 0.
                 OutBuffer.buffer[0] = 0;
                 // 0x80 is the "Toggle LED 2" command in the firmware
                 OutBuffer.buffer[1] = 0x83;//cambio a 0x83 para probar con el led4. Led2 0x80
-                ToggleLedD2Pending = false;
+                ToggleLedD4Pending = false;
                 LastCommand = 0x83;
             }
             else if (MarchaPending == true)
@@ -80,14 +87,79 @@ namespace HidDemoWindowsForms
                 LastCommand = 0x85;
 
             }
+            
+            else if (Timer0Pending == true)
+            {
+                // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
+                OutBuffer.buffer[0] = 0x00;
+                // READ_POT command (see the firmware source code), gets 10-bit ADC Value
+                OutBuffer.buffer[1] = 0x37;
+                LastCommand = 0x37;
+                Timer0Pending =false;
+            }
+           
             // Request that this buffer be sent
             OutBuffer.RequestTransfer = true;
         }
-        
+        // HidUtility informs us if the requested transfer was successful
+        // Schedule to request a packet if the transfer was successful
+        public void PacketSentHandler(object sender, UsbBuffer OutBuffer)
+        {
+             if (LastCommand == 0x83 || LastCommand == 0x85 || LastCommand == 0x86)
+            {
+                WaitingForDevice = false;
+            }
+            else
+            {
+                WaitingForDevice = OutBuffer.TransferSuccessful;
+            }
+/*
+            if (OutBuffer.TransferSuccessful)
+            {
+                ++TxCount;
+            }
+            else
+            {
+                ++TxFailedCount;
+            }
+            */
+        }
+        // HidUtility informs us if the requested transfer was successful and provides us with the received packet
+        //Aqui se usa para intentar que funcione la barra analógica
+        public void PacketReceivedHandler(object sender, UsbBuffer InBuffer)
+        {
+            //WriteLog(string.Format("PacketReceivedHandler: {0:X2}", InBuffer.buffer[1]), false);
+            //WaitingForDevice = false;
+            if (InBuffer.buffer[1] == 0x37)
+            {
+                //Need to reformat the data from two unsigned chars into one unsigned int.
+                AdcValue = (uint)(InBuffer.buffer[3] << 8) + InBuffer.buffer[2];
+            }
 
+            /*           
+            //Fin código nuevo
+            if (InBuffer.TransferSuccessful)
+            {
+                ++RxCount;
+            }
+            else
+            {
+                ++RxFailedCount;
+            }
+            */
+
+        }
+        // HidUtility asks if a packet should be requested from the device
+        // Request a packet if a packet has been successfully sent to the device before
+        public void ReceivePacketHandler(object sender, UsbBuffer InBuffer)
+        {
+            InBuffer.RequestTransfer = WaitingForDevice;
+            //WriteLog(string.Format("ReceivePacketHandler: {0}", WaitingForDevice), false);
+
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            ToggleLedD2Pending = true;
+            ToggleLedD4Pending = true;
         }
 
         private void radioButtonMarcha_CheckedChanged(object sender, EventArgs e)
@@ -241,6 +313,22 @@ namespace HidDemoWindowsForms
                     break;
             }
 
+        }
+        //Update ADC bar
+        private void UpdateAdcBar()
+        {
+            // Ui operations are relatively costly so only update if the value has changed
+            if (AnalogBarMovCont.Value != (int)AdcValue)
+                
+            {
+                AnalogBarMovCont.Value = (int)AdcValue;
+            }
+        }
+
+        private void FormUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            Timer0Pending = true;
+            UpdateAdcBar();
         }
     }
 

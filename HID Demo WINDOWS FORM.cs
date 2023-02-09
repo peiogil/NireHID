@@ -1,10 +1,7 @@
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
 using HidUtilityNuget;
-using USB_HID_con_la_PICDEM_FSUSB_18F4550;
+using System;
+using System.Windows.Forms;
 
 namespace HidDemoWindowsForms
 {
@@ -28,8 +25,8 @@ namespace HidDemoWindowsForms
         bool PushbuttonS3Pressed = false;//Código nuevo
         bool ToggleLedD2Pending = false;
         bool ToggleLedD4Pending = false; //Código nuevo
-        bool Timer0Pending = false; //Código nuevo
-        bool Temp0Contando = false; //Código nuevo
+        //bool Timer0Pending = false; //Código nuevo
+        //bool Temp0Contando = false; //Código nuevo
         uint Temp0Contador = 0;//Código nuevo
         uint AdcValue = 0;
         DateTime ConnectedTimestamp = DateTime.Now;
@@ -132,7 +129,7 @@ namespace HidDemoWindowsForms
             }
             //Fin de código nuevo
         }
-        //Update estado del Temp0 de la PIC
+        /*Update estado del Temp0 de la PIC
         private void UpdateTemp0()
         {
             string tmp;
@@ -158,6 +155,7 @@ namespace HidDemoWindowsForms
             }
 
         }
+        */
 
         //Update ADC bar
         private void UpdateAdcBar()
@@ -303,13 +301,11 @@ namespace HidDemoWindowsForms
         //Schedule to start Timer0 count
         private void IniciaTempor0Button_Click(object sender, EventArgs e)
         {
-            Timer0Pending = true;
-            
-                
+            //Timer0Pending = true;     
         }
-
-        /*
-         * HidUtility callback functions
+       
+       
+         /* HidUtility callback functions
          */
 
         // A USB device has been removed
@@ -356,7 +352,6 @@ namespace HidDemoWindowsForms
             }
             UpdateStatistics();
             UpdatePushbutton();
-           // UpdateTemp0();
             UpdateAdcBar();
         }
 
@@ -385,6 +380,8 @@ namespace HidDemoWindowsForms
                 ToggleLedD4Pending = false;
                 LastCommand = 0x83;
             }
+            //La orden de marcha del motor no se usa ya en esta form
+            /*
             else if (Timer0Pending == true)
             {
                 OutBuffer.buffer[0] = 0;
@@ -397,6 +394,7 @@ namespace HidDemoWindowsForms
                 LastCommand = 0x86;
                 
             }
+            */
             else if (LastCommand == 0x85)
             {
                 // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
@@ -428,8 +426,8 @@ namespace HidDemoWindowsForms
                 // The first byte is the "Report ID" and does not get sent over the USB bus.  Always set = 0.
                 OutBuffer.buffer[0] = 0x00;
                 
-                OutBuffer.buffer[1] = 0x85;  // OutBuffer.buffer[1] = 0x85;        
-                LastCommand = 0x85;          //LastCommand = 0x85;        
+                OutBuffer.buffer[1] = 0x81;  // OutBuffer.buffer[1] = 0x81;        
+                LastCommand = 0x81;          //LastCommand = 0x81;        
             }
             // Request that this buffer be sent
             OutBuffer.RequestTransfer = true;
@@ -439,8 +437,9 @@ namespace HidDemoWindowsForms
         // Schedule to request a packet if the transfer was successful
         public void PacketSentHandler(object sender, UsbBuffer OutBuffer)
         {
-            
-           if(LastCommand == 0x80 || LastCommand==0x83 || LastCommand==0x86)
+           // if (LastCommand == 0x80 || LastCommand == 0x83 || LastCommand == 0x86)
+
+                if (LastCommand == 0x80 || LastCommand == 0x83)
             {
                 WaitingForDevice = false;
             }
@@ -501,7 +500,7 @@ namespace HidDemoWindowsForms
                     PushbuttonS3Pressed = true;
                 }
             }
-            //Temporizador
+            /*Temporizador
             if (InBuffer.buffer[1] == 0x85)
             {
                 if (InBuffer.buffer[2] == 0x01)
@@ -514,6 +513,7 @@ namespace HidDemoWindowsForms
                 }
                 Temp0Contador=InBuffer.buffer[3];
             }
+            */
             //Fin código nuevo
             if (InBuffer.TransferSuccessful)
             {
@@ -572,6 +572,7 @@ namespace HidDemoWindowsForms
             switch (HidUtil.ConnectionStatus)
             {
                 case HidUtility.UsbConnectionStatus.Connected:
+                    //Timer0Pending =true;
                     UpdateStatistics();
                     UpdatePushbutton();
                     //UpdateTemp0(); PASA A CONTROLAR EL clk DE MARCHA
@@ -594,7 +595,7 @@ namespace HidDemoWindowsForms
         private void MovContCLK_Click(object sender, EventArgs e)
         {
             MovContCLK movContCLK = new MovContCLK();
-            movContCLK.Show();
+            movContCLK.ShowDialog();
         }
     } //public partial class Form1 : Form
 } //namespace HidDemoWindowsForms

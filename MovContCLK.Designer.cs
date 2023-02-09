@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.radioButtonParo = new System.Windows.Forms.RadioButton();
             this.radioButtonMarcha = new System.Windows.Forms.RadioButton();
@@ -40,6 +41,8 @@
             this.StatusText = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.listBoxStepResolutionMode = new System.Windows.Forms.ListBox();
+            this.AnalogBarMovCont = new System.Windows.Forms.ProgressBar();
+            this.TimerMovCont = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBoxSentidoGiro.SuspendLayout();
             this.SuspendLayout();
@@ -184,11 +187,29 @@
             this.listBoxStepResolutionMode.TabIndex = 9;
             this.listBoxStepResolutionMode.DoubleClick += new System.EventHandler(this.stepResolutionDoubleClick);
             // 
+            // AnalogBarMovCont
+            // 
+            this.AnalogBarMovCont.BackColor = System.Drawing.Color.White;
+            this.AnalogBarMovCont.Location = new System.Drawing.Point(40, 269);
+            this.AnalogBarMovCont.Maximum = 1024;
+            this.AnalogBarMovCont.Name = "AnalogBarMovCont";
+            this.AnalogBarMovCont.Size = new System.Drawing.Size(253, 26);
+            this.AnalogBarMovCont.Step = 1;
+            this.AnalogBarMovCont.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.AnalogBarMovCont.TabIndex = 20;
+            // 
+            // TimerMovCont
+            // 
+            this.TimerMovCont.Enabled = true;
+            this.TimerMovCont.Interval = 6;
+            this.TimerMovCont.Tick += new System.EventHandler(this.FormUpdateTimer_Tick);
+            // 
             // MovContCLK
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.AnalogBarMovCont);
             this.Controls.Add(this.listBoxStepResolutionMode);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.StatusText);
@@ -223,5 +244,7 @@
         private System.Windows.Forms.Label StatusText;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listBoxStepResolutionMode;
+        private System.Windows.Forms.ProgressBar AnalogBarMovCont;
+        private System.Windows.Forms.Timer TimerMovCont;
     }
 }

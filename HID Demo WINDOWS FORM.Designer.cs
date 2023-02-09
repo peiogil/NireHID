@@ -61,9 +61,6 @@ namespace HidDemoWindowsForms
             this.TxSpeedText = new System.Windows.Forms.Label();
             this.toolTip3 = new System.Windows.Forms.ToolTip(this.components);
             this.ToggleLedD4Button = new System.Windows.Forms.Button();
-            this.IniciaTempor0Button = new System.Windows.Forms.Button();
-            this.Temp_0_activoText = new System.Windows.Forms.Label();
-            this.TempContLabel = new System.Windows.Forms.Label();
             this.Exitbutton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -229,7 +226,7 @@ namespace HidDemoWindowsForms
             // PushbuttonText
             // 
             this.PushbuttonText.AutoSize = true;
-            this.PushbuttonText.Location = new System.Drawing.Point(12, 432);
+            this.PushbuttonText.Location = new System.Drawing.Point(70, 418);
             this.PushbuttonText.Name = "PushbuttonText";
             this.PushbuttonText.Size = new System.Drawing.Size(141, 13);
             this.PushbuttonText.TabIndex = 33;
@@ -308,7 +305,7 @@ namespace HidDemoWindowsForms
             // TxCountText
             // 
             this.TxCountText.AutoSize = true;
-            this.TxCountText.Location = new System.Drawing.Point(12, 384);
+            this.TxCountText.Location = new System.Drawing.Point(70, 370);
             this.TxCountText.Name = "TxCountText";
             this.TxCountText.Size = new System.Drawing.Size(122, 13);
             this.TxCountText.TabIndex = 40;
@@ -317,7 +314,7 @@ namespace HidDemoWindowsForms
             // RxCountText
             // 
             this.RxCountText.AutoSize = true;
-            this.RxCountText.Location = new System.Drawing.Point(285, 384);
+            this.RxCountText.Location = new System.Drawing.Point(247, 370);
             this.RxCountText.Name = "RxCountText";
             this.RxCountText.Size = new System.Drawing.Size(143, 13);
             this.RxCountText.TabIndex = 41;
@@ -326,7 +323,7 @@ namespace HidDemoWindowsForms
             // UptimeText
             // 
             this.UptimeText.AutoSize = true;
-            this.UptimeText.Location = new System.Drawing.Point(12, 360);
+            this.UptimeText.Location = new System.Drawing.Point(258, 337);
             this.UptimeText.Name = "UptimeText";
             this.UptimeText.Size = new System.Drawing.Size(52, 13);
             this.UptimeText.TabIndex = 42;
@@ -335,7 +332,7 @@ namespace HidDemoWindowsForms
             // RxSpeedText
             // 
             this.RxSpeedText.AutoSize = true;
-            this.RxSpeedText.Location = new System.Drawing.Point(285, 409);
+            this.RxSpeedText.Location = new System.Drawing.Point(247, 395);
             this.RxSpeedText.Name = "RxSpeedText";
             this.RxSpeedText.Size = new System.Drawing.Size(82, 13);
             this.RxSpeedText.TabIndex = 44;
@@ -344,7 +341,7 @@ namespace HidDemoWindowsForms
             // TxSpeedText
             // 
             this.TxSpeedText.AutoSize = true;
-            this.TxSpeedText.Location = new System.Drawing.Point(12, 409);
+            this.TxSpeedText.Location = new System.Drawing.Point(70, 395);
             this.TxSpeedText.Name = "TxSpeedText";
             this.TxSpeedText.Size = new System.Drawing.Size(81, 13);
             this.TxSpeedText.TabIndex = 43;
@@ -352,41 +349,13 @@ namespace HidDemoWindowsForms
             // 
             // ToggleLedD4Button
             // 
-            this.ToggleLedD4Button.Location = new System.Drawing.Point(218, 463);
+            this.ToggleLedD4Button.Location = new System.Drawing.Point(377, 464);
             this.ToggleLedD4Button.Name = "ToggleLedD4Button";
             this.ToggleLedD4Button.Size = new System.Drawing.Size(92, 23);
             this.ToggleLedD4Button.TabIndex = 45;
             this.ToggleLedD4Button.Text = "Toggle LED D4";
             this.ToggleLedD4Button.UseVisualStyleBackColor = true;
             this.ToggleLedD4Button.Click += new System.EventHandler(this.ToggleLedD4Button_Click);
-            // 
-            // IniciaTempor0Button
-            // 
-            this.IniciaTempor0Button.Location = new System.Drawing.Point(265, 323);
-            this.IniciaTempor0Button.Name = "IniciaTempor0Button";
-            this.IniciaTempor0Button.Size = new System.Drawing.Size(116, 27);
-            this.IniciaTempor0Button.TabIndex = 46;
-            this.IniciaTempor0Button.Text = "CLK";
-            this.IniciaTempor0Button.UseVisualStyleBackColor = true;
-            this.IniciaTempor0Button.Click += new System.EventHandler(this.IniciaTempor0Button_Click);
-            // 
-            // Temp_0_activoText
-            // 
-            this.Temp_0_activoText.AutoSize = true;
-            this.Temp_0_activoText.Location = new System.Drawing.Point(415, 337);
-            this.Temp_0_activoText.Name = "Temp_0_activoText";
-            this.Temp_0_activoText.Size = new System.Drawing.Size(53, 13);
-            this.Temp_0_activoText.TabIndex = 47;
-            this.Temp_0_activoText.Text = "Unknwon";
-            // 
-            // TempContLabel
-            // 
-            this.TempContLabel.AutoSize = true;
-            this.TempContLabel.Location = new System.Drawing.Point(418, 360);
-            this.TempContLabel.Name = "TempContLabel";
-            this.TempContLabel.Size = new System.Drawing.Size(50, 13);
-            this.TempContLabel.TabIndex = 48;
-            this.TempContLabel.Text = "Contador";
             // 
             // Exitbutton
             // 
@@ -415,9 +384,6 @@ namespace HidDemoWindowsForms
             this.ClientSize = new System.Drawing.Size(511, 768);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Exitbutton);
-            this.Controls.Add(this.TempContLabel);
-            this.Controls.Add(this.Temp_0_activoText);
-            this.Controls.Add(this.IniciaTempor0Button);
             this.Controls.Add(this.ToggleLedD4Button);
             this.Controls.Add(this.RxSpeedText);
             this.Controls.Add(this.TxSpeedText);
@@ -483,9 +449,6 @@ namespace HidDemoWindowsForms
         private System.Windows.Forms.Label TxSpeedText;
         private System.Windows.Forms.ToolTip toolTip3;
         private System.Windows.Forms.Button ToggleLedD4Button;
-        private System.Windows.Forms.Button IniciaTempor0Button;
-        private System.Windows.Forms.Label Temp_0_activoText;
-        private System.Windows.Forms.Label TempContLabel;
         private System.Windows.Forms.Button Exitbutton;
         private System.Windows.Forms.Button button1;
     }

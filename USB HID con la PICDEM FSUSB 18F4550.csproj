@@ -68,9 +68,18 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="ZedGraph, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <HintPath>packages\ZedGraph.6.0.0-alpha0001\lib\net46\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlMovimientoContinuo.cs" />
+    <Compile Include="A_D_potenciometro_grafica.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="A_D_potenciometro_grafica.Designer.cs">
+      <DependentUpon>A_D_potenciometro_grafica.cs</DependentUpon>
+    </Compile>
     <Compile Include="HID Demo WINDOWS FORM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,8 +104,12 @@
     <None Include=".vs\NireHIDUtilityDemo\v15\.suo" />
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="A_D_potenciometro_grafica.resx">
+      <DependentUpon>A_D_potenciometro_grafica.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HID Demo WINDOWS FORM.resx">
       <DependentUpon>HID Demo WINDOWS FORM.cs</DependentUpon>
     </EmbeddedResource>
