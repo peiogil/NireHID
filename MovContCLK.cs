@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HidUtilityNuget;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace HidDemoWindowsForms
 {
@@ -15,7 +17,7 @@ namespace HidDemoWindowsForms
 
     {
         // Global variables used by the form / application
-
+        //int count = 0;
         uint AdcValue = 0;
         bool WaitingForDevice = false;
         bool Timer0Pending = false;
@@ -31,7 +33,7 @@ namespace HidDemoWindowsForms
         byte[] contadorTemp0 = new byte[2];
         ControlMovimientoContinuo controlMovimientoContinuo = new ControlMovimientoContinuo(false);
         HidUtility HidUtil;
-        public unsafe MovContCLK()
+        public MovContCLK()
         {
             InitializeComponent();
             // Get an instance of HidUtility
@@ -50,6 +52,19 @@ namespace HidDemoWindowsForms
             HidUtil.RaisePacketReceivedEvent += PacketReceivedHandler;
             // Initial attempt to connect
             HidUtil.SelectDevice(new HidUtilityNuget.Device(0x04D8, 0X003F));
+            cartesianChart1.Series = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "Series 1",
+                    Values = new ChartValues<double> {4, 6, 5, 2, 7}
+                }
+            };
+            cartesianChart1.AxisX.Add(new Axis
+            {
+                Title = "Month",
+                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" }
+            });
         }// MovContCLK()
 
         public void SendPacketHandlerMovCont(object sender, UsbBuffer OutBuffer)
@@ -317,12 +332,13 @@ namespace HidDemoWindowsForms
         //Update ADC bar
         private void UpdateAdcBar()
         {
-            // Ui operations are relatively costly so only update if the value has changed
+           
             if (AnalogBarMovCont.Value != (int)AdcValue)
                 
             {
                 AnalogBarMovCont.Value = (int)AdcValue;
             }
+           
         }
 
         private void FormUpdateTimer_Tick(object sender, EventArgs e)
