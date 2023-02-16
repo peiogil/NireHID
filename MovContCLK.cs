@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HidUtilityNuget;
-using LiveCharts;
-using LiveCharts.Wpf;
+using ZedGraph;
+
 
 namespace HidDemoWindowsForms
 {
@@ -17,8 +17,8 @@ namespace HidDemoWindowsForms
 
     {
         // Global variables used by the form / application
-        //int count = 0;
-        uint AdcValue = 0;
+
+        uint tick,AdcValue = 0;
         bool WaitingForDevice = false;
         bool Timer0Pending = false;
         bool ToggleLedD4Pending = false;
@@ -33,6 +33,10 @@ namespace HidDemoWindowsForms
         byte[] contadorTemp0 = new byte[2];
         ControlMovimientoContinuo controlMovimientoContinuo = new ControlMovimientoContinuo(false);
         HidUtility HidUtil;
+        GraphPane myPane;
+        
+        static public short[] DatosVelocidadZed = new short[500];
+        static public short[] Dato_VelocidadZed = new short[500];
         public MovContCLK()
         {
             InitializeComponent();
@@ -52,19 +56,34 @@ namespace HidDemoWindowsForms
             HidUtil.RaisePacketReceivedEvent += PacketReceivedHandler;
             // Initial attempt to connect
             HidUtil.SelectDevice(new HidUtilityNuget.Device(0x04D8, 0X003F));
-            cartesianChart1.Series = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Title = "Series 1",
-                    Values = new ChartValues<double> {4, 6, 5, 2, 7}
-                }
-            };
-            cartesianChart1.AxisX.Add(new Axis
-            {
-                Title = "Month",
-                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" }
-            });
+            
+            //ZedGraph
+
+            myPane = zedGraphControl1.GraphPane;
+            //Show the x axis grid
+            myPane.XAxis.MajorGrid.IsVisible = true;
+            //myPane.XAxis.MinorGrid.IsVisible = true;
+            // Make the Y axis scale red
+            myPane.YAxis.Scale.FontSpec.FontColor = Color.Black;
+            myPane.YAxis.Title.FontSpec.FontColor = Color.Black;
+
+            // turn off the opposite tics so the Y tics don't show up on the Y2 axis
+            myPane.YAxis.MajorTic.IsOpposite = true;
+            myPane.YAxis.MinorTic.IsOpposite = true;
+            // Don't display the Y zero line
+            //myPane.YAxis.MajorGrid.IsZeroLine = false;
+            // Align the Y axis labels so they are flush to the axis
+            myPane.YAxis.Scale.Align = AlignP.Center;
+            // Manually set the axis range
+            myPane.YAxis.Scale.Min = 0;
+            myPane.YAxis.Scale.Max = 1200;
+            //myPane.YAxis.Scale.
+            myPane.XAxis.Scale.Max = 498;
+            //myPane.YAxis.Scale.FormatAuto = true;
+            myPane.YAxis.MajorGrid.IsVisible = true;
+            myPane.AxisChange();
+            //Fin ZedGraph
+
         }// MovContCLK()
 
         public void SendPacketHandlerMovCont(object sender, UsbBuffer OutBuffer)
@@ -332,13 +351,45 @@ namespace HidDemoWindowsForms
         //Update ADC bar
         private void UpdateAdcBar()
         {
-           
-            if (AnalogBarMovCont.Value != (int)AdcValue)
+            int i;
+            //si no se ha actualizado en 6*20=120 ms para que se actualice
+            tick++;
+            // Ui operations are relatively costly so only update if the value has changed
+            if (AnalogBarMovCont.Value != (int)AdcValue || tick>20)
                 
             {
+                tick=0;
                 AnalogBarMovCont.Value = (int)AdcValue;
+                
+                //Inicio ZedGraph
+                PointPairList list = new PointPairList();
+
+                Array.Copy(DatosVelocidadZed, 1, Dato_VelocidadZed, 0, 499);
+                Dato_VelocidadZed[499] = (short)AdcValue; //Guardamos en la matriz el nuevo dato a incluir en la representacion.
+                                                   //una vez actualizada la matriz se copia en la que se usa para plotearla.
+                Dato_VelocidadZed.CopyTo(DatosVelocidadZed, 0);
+                for (i = 0; i < 500; i++)
+                {
+                    list.Add(i, DatosVelocidadZed[i]);
+                }
+                // Generate a red curve with diamond symbols, and "Alpha" in the legend
+                CurveList curves = myPane.CurveList;
+                curves.Clear();
+                zedGraphControl1.Refresh();
+                LineItem myCurve = myPane.AddCurve(null,
+                    list, Color.Red, SymbolType.None);
+
+                myCurve.Line.Width = 2.0F;
+                myCurve.Line.IsSmooth = true;
+                myCurve.Line.SmoothTension = 0.5F;
+                //myCurve.Line.StepType = StepType.ForwardStep;
+                zedGraphControl1.Refresh();
+                zedGraphControl1.AxisChange();
+                myPane.AxisChange();
+                // myCurve.Symbol.Fill = new Fill(Color.Red);
+
+                //Fin ZedGraph
             }
-           
         }
 
         private void FormUpdateTimer_Tick(object sender, EventArgs e)

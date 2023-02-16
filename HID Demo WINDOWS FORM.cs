@@ -22,12 +22,12 @@ namespace HidDemoWindowsForms
         byte LastCommand = 0x81;
         bool WaitingForDevice = false;
         bool PushbuttonPressed = false;
-        bool PushbuttonS3Pressed = false;//Cï¿½digo nuevo
+        bool PushbuttonS3Pressed = false;//Código nuevo
         bool ToggleLedD2Pending = false;
-        bool ToggleLedD4Pending = false; //Cï¿½digo nuevo
-        //bool Timer0Pending = false; //Cï¿½digo nuevo
-        //bool Temp0Contando = false; //Cï¿½digo nuevo
-        uint Temp0Contador = 0;//Cï¿½digo nuevo
+        bool ToggleLedD4Pending = false; //Código nuevo
+        //bool Timer0Pending = false; //Código nuevo
+        //bool Temp0Contando = false; //Código nuevo
+        uint Temp0Contador = 0;//Código nuevo
         uint AdcValue = 0;
         DateTime ConnectedTimestamp = DateTime.Now;
         uint TxCount = 0;
@@ -122,12 +122,12 @@ namespace HidDemoWindowsForms
             {
                 PushbuttonText.Text = tmp;
             }
-            //Cï¿½digo nuevo
+            //Código nuevo
             if (PushbuttonS3Pressed)
             {
                 ToggleLedD4Pending = true;
             }
-            //Fin de cï¿½digo nuevo
+            //Fin de código nuevo
         }
         /*Update estado del Temp0 de la PIC
         private void UpdateTemp0()
@@ -488,7 +488,7 @@ namespace HidDemoWindowsForms
                     PushbuttonPressed = true;
                 }
             }
-            //Cï¿½digo nuevo
+            //Código nuevo
             if (InBuffer.buffer[1] == 0x82)
             {
                 if (InBuffer.buffer[2] == 0x01)
@@ -514,7 +514,7 @@ namespace HidDemoWindowsForms
                 Temp0Contador=InBuffer.buffer[3];
             }
             */
-            //Fin cï¿½digo nuevo
+            //Fin código nuevo
             if (InBuffer.TransferSuccessful)
             {
                 ++RxCount;

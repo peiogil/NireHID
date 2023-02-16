@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using ZedGraph;
 
 namespace USB_HID_con_la_PICDEM_FSUSB_18F4550
 {
